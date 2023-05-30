@@ -1,14 +1,16 @@
 package com.dedalus.View;
+import com.dedalus.*;
+import com.dedalus.controller.MyStudent;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.function.BiPredicate;
 
 class UserNotFoundException extends Exception {
-  
-}
 
+}
 public class Student {
 
     public static void main(String[] args) throws InterruptedException {
@@ -24,13 +26,16 @@ public class Student {
             System.out.println("Enter Password");
             pwd = br.readLine();
 
-            if (un.equals("shashi") && pwd.equals("pass")) {
-            	System.out.println("Wait menu is loding......");
+            BiPredicate<String, String> res = (username, password) -> username.equals("shashi") && password.equals("pass");
+
+            if (res.test(un, pwd)) {
+                System.out.println("Wait menu is loading...");
                 Thread.sleep(3000);
                 System.out.println("Welcome " + un);
                 menu();
             } else {
-                throw new UserNotFoundException();
+         
+            	throw new UserNotFoundException();
             }
         } catch (UserNotFoundException unf) {
             System.out.println("User not found!");
@@ -39,12 +44,13 @@ public class Student {
             System.out.println("An error occurred while reading input.");
             e.printStackTrace();
         } finally {
-            System.out.println("Finally .....");
+            System.out.println("Finally...");
         }
         System.out.println("Main Ends");
     }
 
     private static void menu() {
+       
         MyStudent r1 = new MyStudent();
         Scanner sc = new Scanner(System.in);
         String yn = null;
@@ -81,62 +87,3 @@ public class Student {
     }
 }
 
-class MyStudent {
-    private List<String> employees;
-
-    public MyStudent() {
-        employees = new ArrayList<>();
-    }
-
-    public void addEmployee() {
-        Scanner sc = new Scanner(System.in);
-        System.out.println("Enter employee name:");
-        String name = sc.nextLine();
-        System.out.println("Enter employee number:");
-        String num = sc.nextLine();
-        employees.add(name);
-        employees.add(num);
-        System.out.println("Employee added successfully!");
-    }
-
-    public void viewEmployees() {
-        if (employees.isEmpty()) {
-            System.out.println("No employees found.");
-        } else {
-            System.out.println("Employees:");
-            for (String employee : employees) {
-                System.out.println(employee);
-            }
-        }
-    }
-
-    public void serialize() {
-        try {
-            FileOutputStream fileOut = new FileOutputStream("employees.ser");
-            ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
-            objectOut.writeObject(employees);
-            objectOut.close();
-            fileOut.close();
-            System.out.println("Serialization successful. Saved to employees.txt");
-        } catch (IOException e) {
-            System.out.println("Serialization error: " + e.getMessage());
-        }
-    }
-
-    public void deserialize() {
-    	 try {
-    	        FileInputStream fileIn = new FileInputStream("employees.ser");
-    	        ObjectInputStream objectIn = new ObjectInputStream(fileIn);
-    	        employees = (List<String>) objectIn.readObject();
-    	        objectIn.close();
-    	        fileIn.close();
-    	        System.out.println("Deserialization successful. Loaded employees from employees.ser");
-    	        System.out.println("Employees:");
-    	        for (String employee : employees) {
-    	            System.out.println(employee);
-    	        }
-    	    } catch (IOException | ClassNotFoundException e) {
-    	        System.out.println("Deserialization error: " + e.getMessage());
-    	    }
-    }
-}
