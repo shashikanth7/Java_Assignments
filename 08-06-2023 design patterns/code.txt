@@ -1,0 +1,54 @@
+package CreationPattern;
+
+interface Instrument {
+    void playSound();
+}
+
+class Guitar implements Instrument {
+    public void playSound() {
+        System.out.println("The guitar makes a melodious sound.");
+    }
+}
+
+class Piano implements Instrument {
+    public void playSound() {
+        System.out.println("The piano produces beautiful tunes.");
+    }
+}
+
+class Violin implements Instrument {
+    public void playSound() {
+        System.out.println("The violin creates a soulful melody.");
+    }
+}
+
+class SoundPlaying {
+    public Instrument getInstrumentProcess(String instrumentType) {
+        if (instrumentType == null) {
+            return null;
+        }
+        if (instrumentType.equalsIgnoreCase("GUITAR")) {
+            return new Guitar();
+        } else if (instrumentType.equalsIgnoreCase("PIANO")) {
+            return new Piano();
+        } else if (instrumentType.equalsIgnoreCase("VIOLIN")) {
+            return new Violin();
+        }
+        return null;
+    }
+}
+
+public class MyProgram {
+    public static void main(String[] args) {
+        SoundPlaying sound = new SoundPlaying();
+
+        Instrument instrument1 = sound.getInstrumentProcess("GUITAR");
+        instrument1.playSound();
+
+        Instrument instrument2 = sound.getInstrumentProcess("PIANO");
+        instrument2.playSound();
+
+        Instrument instrument3 = sound.getInstrumentProcess("VIOLIN");
+        instrument3.playSound();
+    }
+}
